@@ -24,4 +24,4 @@ jobs:
 
       - name: Test connectivity over the overlay network
         shell: bash
-        run: ping -c 10 100.71.0.20
+        run: ping -c 10 100.71.2.23
