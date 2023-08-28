@@ -1,6 +1,6 @@
 # action-dnclient
 
-This GitHub Action configured `dnclient` to join your [Defined Networking](https://defined.net) overlay network.
+This GitHub Action configures `dnclient` to join your [Defined Networking](https://defined.net) overlay network during your Action run. After you add the step below, all other steps in your Action will be able to connect to other hosts on your overlay network. This Action uses [quickvm/defined-systemd-units](https://github.com/quickvm/defined-systemd-units) under the hood. See that project's [README](https://github.com/quickvm/defined-systemd-units/blob/master/README.md) for more details on how to configure `dnclient` with this Action.
 
 ## Usage
 
@@ -14,8 +14,6 @@ You can enable your GitHub Action to join your overlay network by adding the fol
       dn-network-id: ${{ secrets.DN_NETWORK_ID }}
       dn-role-id: ${{ secrets.DN_ROLE_ID }}
 ```
-
-All other steps in your Action will be able to connect to other hosts on your overlay network. This Action uses [quickvm/defined-systemd-units](https://github.com/quickvm/defined-systemd-units) under the hood. See that project's [README](https://github.com/quickvm/defined-systemd-units/blob/master/README.md) for more details on how to configure `dnclient` with this Action.
 
 The following inputs are required:
 
@@ -37,7 +35,7 @@ dn-ip-address: "100.100.0.69"
 
 and you can store them as [GitHub Variables](https://docs.github.com/en/actions/learn-github-actions/variables).
 
-Note: If you set a static hostname and IP Address and you have more than on action run at a time you might see failures. Use these at your own risk!
+Note: If you set a static hostname and IP address and you have more than one Action run the same Workflow at a same time you might see failures. Names and IP addresses have to be unique in Defined.net. Use the `dn-hostname` and `dn-ip-address` inputs at your own risk!
 
 ## License
 
