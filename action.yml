@@ -32,7 +32,7 @@ runs:
     steps:
       - name: Verify OS is Linux
         id: verify-os
-        if: ${{ runner.os != "Linux" }}
+        if: ${{ runner.os != 'Linux' }}
         shell: bash
         run: |
           echo "This GitHub Action only runs on Linux!"
