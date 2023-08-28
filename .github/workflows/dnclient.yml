@@ -1,0 +1,30 @@
+name: dnclient
+
+on:
+  push:
+    tags-ignore:
+    - 'v*'
+    branches:
+    - "master"
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+
+      - name: Setup dnclient
+        uses: quickvm/action-dnclient@v1
+        with:
+          dn-api-key: ${{ secrets.DN_API_KEY_ACTION_DNCLIENT }}
+          dn-network-id: ${{ secrets.DN_NETWORK_ID_ACTION_DNCLIENT }}
+          dn-role-id: ${{ secrets.DN_ROLE_ID_ACTION_DNCLIENT }}
+
+      - name: yq
+        uses: mikefarah/yq@4
+
+      - name: Get the IP address from dnclient info
+        run:
+          sudo dnclient info|yq .cert.details.ips[0]
