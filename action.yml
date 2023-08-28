@@ -1,0 +1,88 @@
+# SPDX-License-Identifier: MIT
+#
+# Copyright (c) 2023 QuickVM, LLC <contact@quickvm.com> All Rights Reserved.
+
+name: "action-dnclient"
+description: "Connect your GitHub Actions to a defined.net overlay network."
+branding:
+  icon: "share-2"
+  color: "green"
+inputs:
+  dn-api-key:
+    description: "Your defined.net API key used to enroll the GitHub Action"
+    required: true
+  dn-network-id:
+    description: "Your defined.net networkID that the GitHub Action will enroll into."
+    required: true
+  dn-role-id:
+    description: "The defined.net role for the GitHub Action will enroll into."
+    required: true
+  dn-ip-address:
+    description: "If set to an IP in your defined.net network CIDR range it will enroll the host with that IP address."
+    required: false
+  dn-client-version:
+    description: "The version of dnclient to install."
+    required: false
+  dn-hostname:
+    description: "Set a static hostname for the action to use."
+    required: false
+    default: ""
+runs:
+    using: "composite"
+    steps:
+      - name: Verify OS is Linux
+        id: verify-os
+        if: ${{ runner.os != "Linux" }}
+        shell: bash
+        run: |
+          echo "This GitHub Action only runs on Linux!"
+          exit 1
+
+      - name: Clone quickvm/defined-systemd-units
+        id: checkout-defined-systemd-units
+        uses: actions/checkout@v3
+        with:
+          repository: quickvm/defined-systemd-units
+          path: defined-systemd-units
+
+      - name: Verify required inputs are set
+        id: verify-required-inputs
+        if: ${{ inputs.dn-api-key == '' || inputs.dn-network-id == '' || inputs.dn-role-id == '') }}
+        shell: bash
+        run: |
+          echo "One of the following inputs are not set: dn-api-key, dn-network-id, dn-role-id. Ensure you have added them as Secrets for your workflow. See https://docs.github.com/en/actions/security-guides/encrypted-secrets"
+          exit 1
+
+      - name: Install defined-systemd-units
+        id: install-defined-systemd-units
+        shell: bash
+        working-directory: defined-systemd-units
+        run: |
+          if [ -n "${{ inputs.dn-version }}" ]; then
+            DN_VERSION="${{ inputs.dn-version }}"
+          fi
+          sudo -E ./install
+
+      - name: Configure defined-systemd-units
+        id: configure-defined-systemd-units
+        shell: bash
+        working-directory: defined-systemd-units
+        env:
+          DN_API_KEY: ${{ inputs.dn-api-key }}
+          DN_NETWORK_ID: ${{ inputs.dn-network-id }}
+          DN_ROLE_ID: ${{ inputs.dn-role-id }}
+          DN_HOSTNAME: ${{ inputs.dn-hostname }}
+        run: |
+          if [ -n "${{ inputs.dn-ip-address }}" ]; then
+            DN_IP_ADDRESS="${{ inputs.dn-ip-address }}"
+          fi
+          if [ -z "${DN_HOSTNAME}" ]; then
+            DN_NAME="github-action-$(hostname)"
+          fi
+          sudo -E dnctl write_config
+
+      - name: Start dnclient.service unit
+        id: start-dnclient-service-unit
+        shell: bash
+        run: |
+          sudo -E dnctl start
