@@ -47,7 +47,7 @@ runs:
 
       - name: Verify required inputs are set
         id: verify-required-inputs
-        if: ${{ inputs.dn-api-key == '' || inputs.dn-network-id == '' || inputs.dn-role-id == '') }}
+        if: ${{ inputs.dn-api-key == '' || inputs.dn-network-id == '' || inputs.dn-role-id == '' }}
         shell: bash
         run: |
           echo "One of the following inputs are not set: dn-api-key, dn-network-id, dn-role-id. Ensure you have added them as Secrets for your workflow. See https://docs.github.com/en/actions/security-guides/encrypted-secrets"
