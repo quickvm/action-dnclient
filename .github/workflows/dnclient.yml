@@ -23,6 +23,6 @@ jobs:
           dn-role-id: ${{ secrets.DN_ROLE_ID_ACTION_DNCLIENT }}
 
       - name: Get the IP address from dnclient info
-        uses: mikefarah/yq@master
+        uses: mikefarah/yq@v4.35.1
         with:
-          cmd: sudo dnclient info | yq .cert.details.ips[0]
+          cmd: yq .cert.details.ips[0] <(sudo dnclient info)
