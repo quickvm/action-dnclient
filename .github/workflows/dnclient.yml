@@ -22,9 +22,7 @@ jobs:
           dn-network-id: ${{ secrets.DN_NETWORK_ID_ACTION_DNCLIENT }}
           dn-role-id: ${{ secrets.DN_ROLE_ID_ACTION_DNCLIENT }}
 
-      - name: yq
-        uses: mikefarah/yq@4
-
       - name: Get the IP address from dnclient info
-        run:
-          sudo dnclient info|yq .cert.details.ips[0]
+        uses: mikefarah/yq@master
+        with:
+          cmd: sudo dnclient info | yq .cert.details.ips[0]
