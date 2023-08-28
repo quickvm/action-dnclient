@@ -22,7 +22,10 @@ jobs:
           dn-network-id: ${{ secrets.DN_NETWORK_ID_ACTION_DNCLIENT }}
           dn-role-id: ${{ secrets.DN_ROLE_ID_ACTION_DNCLIENT }}
 
-      - name: Get the IP address from dnclient info
-        uses: mikefarah/yq@v4.35.1
-        with:
-          cmd: yq .cert.details.ips[0] <(sudo dnclient info)
+      - name: Get the Host ID of the action
+        shell: bash
+        run: "sudo grep -F host_id /etc/defined/dnclient.yml |cut -d: -f2|xargs"
+
+      - name: Send 10 pings to another host
+        shell: bash
+        run: ping -c 10 100.71.0.20
