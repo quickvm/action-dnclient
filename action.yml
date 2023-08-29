@@ -78,6 +78,8 @@ runs:
           fi
           if [ -z "${DN_HOSTNAME}" ]; then
             export DN_NAME="github-action-$(hostname)"
+          else
+            export DN_NAME="${DN_HOSTNAME}"
           fi
           sudo -E dnctl write_config
 
