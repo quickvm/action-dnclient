@@ -73,10 +73,12 @@ runs:
           DN_ROLE_ID: ${{ inputs.dn-role-id }}
           DN_HOSTNAME: ${{ inputs.dn-hostname }}
         run: |
+          echo "${{ inputs.dn-ip-address }}"
+          echo "${DN_HOSTNAME}"
           if [ -n "${{ inputs.dn-ip-address }}" ]; then
             export DN_IP_ADDRESS="${{ inputs.dn-ip-address }}"
           fi
-          if [[ "${DN_HOSTNAME}" ]]; then
+          if [ -z "${DN_HOSTNAME}" ]; then
             export DN_NAME="github-action-$(hostname)"
           fi
           sudo -E dnctl write_config

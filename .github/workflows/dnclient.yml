@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup dnclient
-        uses: quickvm/action-dnclient@v1
+        uses: quickvm/action-dnclient@master
         with:
           dn-api-key: ${{ secrets.DN_API_KEY_ACTION_DNCLIENT }}
           dn-network-id: ${{ secrets.DN_NETWORK_ID_ACTION_DNCLIENT }}
