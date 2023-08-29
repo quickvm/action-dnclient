@@ -58,8 +58,8 @@ runs:
         shell: bash
         working-directory: defined-systemd-units
         run: |
-          if [ -n "${{ inputs.dn-version }}" ]; then
-            export DN_VERSION="${{ inputs.dn-version }}"
+          if [ -n "${{ inputs.dn-client-version }}" ]; then
+            export DN_VERSION="${{ inputs.dn-client-version }}"
           fi
           sudo -E ./install
 
