@@ -59,7 +59,7 @@ runs:
         working-directory: defined-systemd-units
         run: |
           if [ -n "${{ inputs.dn-version }}" ]; then
-            DN_VERSION="${{ inputs.dn-version }}"
+            export DN_VERSION="${{ inputs.dn-version }}"
           fi
           sudo -E ./install
 
@@ -74,10 +74,10 @@ runs:
           DN_HOSTNAME: ${{ inputs.dn-hostname }}
         run: |
           if [ -n "${{ inputs.dn-ip-address }}" ]; then
-            DN_IP_ADDRESS="${{ inputs.dn-ip-address }}"
+            export DN_IP_ADDRESS="${{ inputs.dn-ip-address }}"
           fi
           if [[ "${DN_HOSTNAME}" ]]; then
-            DN_NAME="github-action-$(hostname)"
+            export DN_NAME="github-action-$(hostname)"
           fi
           sudo -E dnctl write_config
 
