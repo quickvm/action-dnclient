@@ -21,9 +21,6 @@ jobs:
           dn-api-key: ${{ secrets.DN_API_KEY_ACTION_DNCLIENT }}
           dn-network-id: ${{ secrets.DN_NETWORK_ID_ACTION_DNCLIENT }}
           dn-role-id: ${{ secrets.DN_ROLE_ID_ACTION_DNCLIENT }}
-          dn-client-version: 1.2.1
-          dn-ip-address: 100.71.0.69
-          dn-hostname: gh-action-test
 
       - name: Test connectivity over the overlay network
         shell: bash
